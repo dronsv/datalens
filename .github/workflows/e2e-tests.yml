@@ -37,11 +37,11 @@ jobs:
         with:
           repository: datalens-tech/datalens-ui
           path: ./datalens-ui
-          ref: release-${{ env.UI_VERSION }}
+          ref: v${{ env.UI_VERSION }}
 
       - name: Check docker compose Config
         working-directory: ./datalens-ui
-        run: npm run test:e2e:docker:check
+        run: docker compose -f tests/docker-compose.e2e.yml config --quiet
         env:
           US_VERSION: ${{ env.US_VERSION }}
           AUTH_VERSION: ${{ env.AUTH_VERSION }}
@@ -49,7 +49,7 @@ jobs:
           DATA_API_VERSION: ${{ env.DATA_API_VERSION }}
           UI_VERSION: ${{ env.UI_VERSION }}
 
-      - name: Run tests from builded docker image
+      - name: Build UI and run E2E tests
         if: ${{ env.UI_VERSION != '' }}
         working-directory: ./datalens-ui
         run: npm run test:e2e:docker
